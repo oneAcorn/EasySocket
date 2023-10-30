@@ -21,6 +21,7 @@ import com.easysocket.interfaces.conn.SocketActionListener;
 import com.easysocket.message.CallbackSender;
 import com.easysocket.message.ClientHeartBeat;
 import com.easysocket.message.TestMessage;
+import com.easysocket.utils.ByteUtils;
 import com.easysocket.utils.LogUtil;
 
 import org.json.JSONException;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ADDRESS_9998 = getApplicationContext().getResources().getString(R.string.local_ip) + ":9998";
+        ADDRESS_9998 = getApplicationContext().getResources().getString(R.string.local_ip) + ":8080";
 
         controlConnect = findViewById(R.id.control_conn);
         controlConnect9998 = findViewById(R.id.control_conn1);
@@ -274,13 +275,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 发送一个的消息，
      */
     private void sendTestMessage(String address) {
-        TestMessage testMessage = new TestMessage();
-        testMessage.setMsgId("test_msg");
-        testMessage.setFrom("android");
+//        TestMessage testMessage = new TestMessage();
+//        testMessage.setMsgId("test_msg");
+//        testMessage.setFrom("android");
         // 发送
-        EasySocket.getInstance().upMessage(testMessage.pack(), address);
+        EasySocket.getInstance().upMessage(getTestMsg(), address);
     }
 
+    private byte[] getTestMsg(){
+        return ByteUtils.toByteArrayBigOrder("5AA5500009303031220528A100E594995BB5");
+    }
 
     /**
      * socket行为监听
@@ -381,10 +385,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EasySocketOptions options = new EasySocketOptions.Builder()
                 .setCallbackIDFactory(new CallbackIDFactoryImpl())
                 // 主机地址，请填写自己的IP地址，以getString的方式是为了隐藏作者自己的IP地址
-                .setSocketAddress(new SocketAddress(getResources().getString(R.string.local_ip), 9998))
+                .setSocketAddress(new SocketAddress(getResources().getString(R.string.local_ip), 8080))
                 // 定义消息协议，方便解决 socket黏包、分包的问题，如果客户端定义了消息协议，那么
                 // 服务端也要对应对应的消息协议，如果这里没有定义消息协议，服务端也不需要定义
-                .setReaderProtocol(new DefaultMessageProtocol())
+//                .setReaderProtocol(new DefaultMessageProtocol())
                 .build();
 
         // 初始化

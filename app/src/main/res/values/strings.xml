@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EasySocket</string>
+    <string name="local_ip">192.168.3.3</string>
 </resources>
